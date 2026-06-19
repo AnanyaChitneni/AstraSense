@@ -110,6 +110,7 @@ def load_video_b64(path):
             return base64.b64encode(f.read()).decode()
     return ""
 
+
 # ============================================
 #   INTRO VIDEO
 # ============================================
@@ -123,8 +124,6 @@ if not st.session_state.analysis_intro_shown:
     intro_src = f"data:video/mp4;base64,{intro_b64}" if intro_b64 else ""
 
     st.markdown("""
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     """, unsafe_allow_html=True)
 
@@ -132,75 +131,121 @@ if not st.session_state.analysis_intro_shown:
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
 
+    body, .main, [data-testid="stAppViewContainer"] {{
+        overflow: hidden !important;
+    }}
+
     #intro-overlay {{
         position: fixed !important;
         top: 0 !important; left: 0 !important;
-        width: 100vw !important; height: 56.25vw !important;
-        max-height: 100vh !important;
-        z-index: 99999 !important;
+        width: 100vw !important; height: 100vh !important;
+        z-index: 999999 !important;
         background: #000510;
-        display: flex; align-items: center; justify-content: center;
-        transition: opacity 0.6s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
+        transition: opacity 1s ease;
     }}
     #intro-overlay video {{
         position: absolute; top: 0; left: 0;
-        width: 100%; height: 100%; object-fit: cover;
+        width: 100%; height: 100%;
+        object-fit: cover;
     }}
     #intro-overlay .ov {{
         position: absolute; top: 0; left: 0;
         width: 100%; height: 100%;
-        background: rgba(0,5,20,0.3); z-index: 1;
+        background: rgba(0,5,20,0.35);
+        z-index: 1;
     }}
-    #intro-overlay .txt {{ position: relative; z-index: 2; text-align: center; }}
+    #intro-overlay .txt {{
+        position: relative; z-index: 2; text-align: center;
+        padding: 1rem;
+    }}
     #intro-overlay .t1 {{
         font-family: 'Orbitron', monospace !important;
-        font-size: clamp(2.5rem, 8vw, 7rem); font-weight: 900;
+        font-size: clamp(2rem, 8vw, 7rem); font-weight: 900;
         background: linear-gradient(135deg,#00d4ff 0%,#0099ff 35%,#0055dd 65%,#00aaff 100%);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         background-clip: text;
-        letter-spacing: clamp(0.2rem, 1.5vw, 0.7rem); line-height: 1;
-        opacity: 0; animation: introUp 1s ease 0.3s forwards;
+        letter-spacing: clamp(0.15rem, 1.5vw, 0.7rem); line-height: 1;
+        opacity: 0;
+        animation: introUp 1s ease 0.4s forwards;
     }}
     #intro-overlay .t2 {{
         font-family: 'Share Tech Mono', monospace !important;
-        font-size: clamp(0.5rem, 1.3vw, 0.75rem);
+        font-size: clamp(0.45rem, 1.3vw, 0.75rem);
         color: rgba(0,200,255,0.65);
-        letter-spacing: clamp(0.15rem, 0.8vw, 0.45rem);
+        letter-spacing: clamp(0.1rem, 0.8vw, 0.45rem);
         margin-top: 1rem; opacity: 0;
-        animation: introUp 1s ease 0.8s forwards;
+        animation: introUp 1s ease 0.9s forwards;
+    }}
+    #intro-overlay .gbar {{
+        width: clamp(60px, 15vw, 180px); height: 1px;
+        background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+        margin: 1rem auto; opacity: 0;
+        animation: introUp 1s ease 1.2s forwards;
     }}
     @keyframes introUp {{
         from {{ opacity:0; transform:translateY(20px); }}
         to   {{ opacity:1; transform:translateY(0); }}
     }}
-    #intro-overlay.hide {{
-        opacity: 0 !important; pointer-events: none !important;
+    #intro-overlay.hiding {{
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }}
+    #intro-overlay.hidden {{
+        display: none !important;
     }}
     </style>
 
     <div id="intro-overlay">
-        {'<video autoplay muted playsinline><source src="' + intro_src + '" type="video/mp4"></video>' if intro_src else ''}
+        {'<video id="intro-vid" autoplay muted playsinline><source src="' + intro_src + '" type="video/mp4"></video>' if intro_src else '<div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(0,40,120,0.6),#000510);"></div>'}
         <div class="ov"></div>
         <div class="txt">
             <div class="t1">ASTRASENSE</div>
+            <div class="gbar"></div>
             <div class="t2">◈ &nbsp; INITIALIZING ANALYSIS MODULE &nbsp; ◈</div>
         </div>
     </div>
 
     <script>
-    document.fonts.ready.then(function() {{
-        setTimeout(function() {{
-            var el = document.getElementById('intro-overlay');
-            if(el) {{
-                el.classList.add('hide');
-                setTimeout(function() {{ if(el) el.style.display = 'none'; }}, 700);
-            }}
-        }}, 2500);
-    }});
+    (function() {{
+        var overlay  = document.getElementById('intro-overlay');
+        var vid      = document.getElementById('intro-vid');
+        var SHOW_MS  = 5000;   // exactly 5 seconds visible
+        var FADE_MS  = 800;    // fade out duration
+
+        function dismiss() {{
+            if (!overlay) return;
+            overlay.classList.add('hiding');
+            setTimeout(function() {{
+                if (overlay) overlay.classList.add('hidden');
+                // Tell Streamlit to rerun via a small hack
+                window.parent.postMessage({{type:'streamlit:setComponentValue', value: true}}, '*');
+            }}, FADE_MS);
+        }}
+
+        // Primary: dismiss after exactly 5 seconds regardless of video
+        var timer = setTimeout(dismiss, SHOW_MS);
+
+        // If video exists and ends before 5s, still wait the full 5s
+        // If video ends after 5s, dismiss at 5s anyway
+        if (vid) {{
+            vid.addEventListener('ended', function() {{
+                // Video ended — dismiss if 5s already passed, else wait
+                // timer handles this automatically
+            }});
+            vid.addEventListener('error', function() {{
+                // Video failed to load — fallback to gradient, timer still runs
+                vid.style.display = 'none';
+            }});
+        }}
+    }})();
     </script>
     """, unsafe_allow_html=True)
 
-    time.sleep(3)
+    time.sleep(5.5)
     st.rerun()
 
 # ============================================
