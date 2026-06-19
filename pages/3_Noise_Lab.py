@@ -484,16 +484,15 @@ st.markdown("""
 # ── NAV ──────────────────────────────────────
 st.markdown("""
 <div class='page-nav'>
-    <a href='/' class='nav-logo'>◈ ASTRASENSE</a>
+    <a href='/' class='nav-logo' target="_self">◈ ASTRASENSE</a>
     <div class='nav-links'>
-        <a href='/Analysis'>ANALYSIS</a>
-        <a href='/Star_Catalogue'>STAR CATALOGUE</a>
-        <a href='/Noise_Lab' class='active'>NOISE LAB</a>
-        <a href='/Science'>THE SCIENCE</a>
-        <a href='/Performance'>PERFORMANCE</a>
+        <a href='/Analysis' target="_self">ANALYSIS</a>
+        <a href='/Star_Catalogue' target="_self">STAR CATALOGUE</a>
+        <a href='/Noise_Lab' target="_self">NOISE LAB</a>
+        <a href='/Science' target="_self">THE SCIENCE</a>
+        <a href='/Performance' target="_self">PERFORMANCE</a>
     </div>
 </div>
-<div class='nav-spacer'></div>
 """, unsafe_allow_html=True)
 
 # ── HERO ─────────────────────────────────────

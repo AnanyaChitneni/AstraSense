@@ -377,6 +377,7 @@ def chart_star_rmse_dots():
 page_html = """<!DOCTYPE html>
 <html lang="en">
 <head>
+<base target="_self">
 <meta charset="UTF-8">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -409,11 +410,11 @@ nav{
 <nav>
     <a href="/" class="nav-logo">◈ ASTRASENSE</a>
     <div class="nav-links">
-        <a href="/Analysis">ANALYSIS</a>
-        <a href="/Star_Catalogue">STAR CATALOGUE</a>
-        <a href="/Noise_Lab">NOISE LAB</a>
-        <a href="/Science">THE SCIENCE</a>
-        <a href="/Performance" class="active">PERFORMANCE</a>
+        <a href='/Analysis' target="_self">ANALYSIS</a>
+        <a href='/Star_Catalogue' target="_self">STAR CATALOGUE</a>
+        <a href='/Noise_Lab' target="_self">NOISE LAB</a>
+        <a href='/Science' target="_self">THE SCIENCE</a>
+        <a href='/Performance' target="_self">PERFORMANCE</a>
     </div>
 </nav>
 </body>

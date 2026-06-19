@@ -140,6 +140,7 @@ ch7_src = f"data:image/jpeg;base64,{ch7_b64}" if ch7_b64 else ""
 html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
+<base target="_self">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -446,11 +447,11 @@ nav{{
 <nav>
     <a href="/" class="nav-logo">◈ ASTRASENSE</a>
     <div class="nav-links">
-        <a href="/Analysis">ANALYSIS</a>
-        <a href="/Star_Catalogue">STAR CATALOGUE</a>
-        <a href="/Noise_Lab">NOISE LAB</a>
-        <a href="/Science" class="active">THE SCIENCE</a>
-        <a href="/Performance">PERFORMANCE</a>
+        <a href='/Analysis' target="_self">ANALYSIS</a>
+        <a href='/Star_Catalogue' target="_self">STAR CATALOGUE</a>
+        <a href='/Noise_Lab' target="_self">NOISE LAB</a>
+        <a href='/Science' target="_self">THE SCIENCE</a>
+        <a href='/Performance' target="_self">PERFORMANCE</a>
     </div>
 </nav>
 

@@ -119,14 +119,34 @@ if 'analysis_intro_shown' not in st.session_state:
 if not st.session_state.analysis_intro_shown:
     st.session_state.analysis_intro_shown = True
 
+    # Try to load video — works locally, gracefully skips on cloud
     intro_b64 = load_video_b64("assets/intro_video.mp4")
     intro_src = f"data:video/mp4;base64,{intro_b64}" if intro_b64 else ""
+
+    # Also try cloud path
+    if not intro_src:
+        cloud_paths = [
+            "/mount/src/astrasense/assets/intro_video.mp4",
+            os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "intro_video.mp4"),
+        ]
+        for p in cloud_paths:
+            if os.path.exists(p):
+                intro_b64 = load_video_b64(p)
+                intro_src = f"data:video/mp4;base64,{intro_b64}" if intro_b64 else ""
+                if intro_src:
+                    break
 
     st.markdown("""
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     """, unsafe_allow_html=True)
+
+    video_tag = (
+        f'<video autoplay muted playsinline>'
+        f'<source src="{intro_src}" type="video/mp4">'
+        f'</video>'
+    ) if intro_src else ''
 
     st.markdown(f"""
     <style>
@@ -135,31 +155,50 @@ if not st.session_state.analysis_intro_shown:
     #intro-overlay {{
         position: fixed !important;
         top: 0 !important; left: 0 !important;
-        width: 100vw !important; height: 56.25vw !important;
-        max-height: 100vh !important;
+        width: 100vw !important; height: 100vh !important;
         z-index: 99999 !important;
         background: #000510;
         display: flex; align-items: center; justify-content: center;
-        transition: opacity 0.6s ease;
+        transition: opacity 0.8s ease;
     }}
     #intro-overlay video {{
         position: absolute; top: 0; left: 0;
         width: 100%; height: 100%; object-fit: cover;
     }}
+
+    /* fallback animated background shown when video is absent */
+    #intro-overlay .bg-fallback {{
+        position: absolute; inset: 0;
+        background:
+            radial-gradient(ellipse at 20% 30%, rgba(0,80,200,0.35) 0%, transparent 55%),
+            radial-gradient(ellipse at 80% 70%, rgba(0,40,150,0.25) 0%, transparent 55%),
+            radial-gradient(ellipse at 50% 50%, rgba(0,20,80,0.45) 0%, transparent 70%);
+        animation: introBgPulse 2.5s ease-in-out infinite alternate;
+    }}
+    @keyframes introBgPulse {{
+        from {{ opacity: 0.6; }}
+        to   {{ opacity: 1; }}
+    }}
+
     #intro-overlay .ov {{
         position: absolute; top: 0; left: 0;
         width: 100%; height: 100%;
         background: rgba(0,5,20,0.3); z-index: 1;
     }}
-    #intro-overlay .txt {{ position: relative; z-index: 2; text-align: center; }}
+    #intro-overlay .txt {{
+        position: relative; z-index: 2; text-align: center;
+    }}
     #intro-overlay .t1 {{
         font-family: 'Orbitron', monospace !important;
         font-size: clamp(2.5rem, 8vw, 7rem); font-weight: 900;
-        background: linear-gradient(135deg,#00d4ff 0%,#0099ff 35%,#0055dd 65%,#00aaff 100%);
+        background: linear-gradient(135deg,
+            #00d4ff 0%, #0099ff 35%, #0055dd 65%, #00aaff 100%);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         background-clip: text;
         letter-spacing: clamp(0.2rem, 1.5vw, 0.7rem); line-height: 1;
-        opacity: 0; animation: introUp 1s ease 0.3s forwards;
+        opacity: 0;
+        animation: introUp 1s ease 0.3s forwards,
+                   titleGlow 2s ease-in-out 1.2s infinite alternate;
     }}
     #intro-overlay .t2 {{
         font-family: 'Share Tech Mono', monospace !important;
@@ -169,20 +208,33 @@ if not st.session_state.analysis_intro_shown:
         margin-top: 1rem; opacity: 0;
         animation: introUp 1s ease 0.8s forwards;
     }}
+    .intro-glow-bar {{
+        width: clamp(80px, 20vw, 220px); height: 1px;
+        background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+        margin: 1.2rem auto; opacity: 0;
+        animation: introUp 1s ease 1.1s forwards;
+    }}
     @keyframes introUp {{
         from {{ opacity:0; transform:translateY(20px); }}
         to   {{ opacity:1; transform:translateY(0); }}
     }}
+    @keyframes titleGlow {{
+        from {{ filter: drop-shadow(0 0 20px rgba(0,180,255,0.4)); }}
+        to   {{ filter: drop-shadow(0 0 60px rgba(0,150,255,0.85)); }}
+    }}
     #intro-overlay.hide {{
-        opacity: 0 !important; pointer-events: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
     }}
     </style>
 
     <div id="intro-overlay">
-        {'<video autoplay muted playsinline><source src="' + intro_src + '" type="video/mp4"></video>' if intro_src else ''}
+        {video_tag}
+        <div class="bg-fallback"></div>
         <div class="ov"></div>
         <div class="txt">
             <div class="t1">ASTRASENSE</div>
+            <div class="intro-glow-bar"></div>
             <div class="t2">◈ &nbsp; INITIALIZING ANALYSIS MODULE &nbsp; ◈</div>
         </div>
     </div>
@@ -193,7 +245,9 @@ if not st.session_state.analysis_intro_shown:
             var el = document.getElementById('intro-overlay');
             if(el) {{
                 el.classList.add('hide');
-                setTimeout(function() {{ if(el) el.style.display = 'none'; }}, 700);
+                setTimeout(function() {{
+                    if(el) el.style.display = 'none';
+                }}, 900);
             }}
         }}, 2500);
     }});
@@ -472,16 +526,15 @@ st.markdown("""
 # ============================================
 st.markdown("""
 <div class='page-nav'>
-    <a href='/' class='nav-logo'>◈ ASTRASENSE</a>
+    <a href='/' class='nav-logo' target="_self">◈ ASTRASENSE</a>
     <div class='nav-links'>
-        <a href='/Analysis' class='active'>ANALYSIS</a>
-        <a href='/Star_Catalogue'>STAR CATALOGUE</a>
-        <a href='/Noise_Lab'>NOISE LAB</a>
-        <a href='/Science'>THE SCIENCE</a>
-        <a href='/Performance'>PERFORMANCE</a>
+        <a href='/Analysis' target="_self">ANALYSIS</a>
+        <a href='/Star_Catalogue' target="_self">STAR CATALOGUE</a>
+        <a href='/Noise_Lab' target="_self">NOISE LAB</a>
+        <a href='/Science' target="_self">THE SCIENCE</a>
+        <a href='/Performance' target="_self">PERFORMANCE</a>
     </div>
 </div>
-<div class='nav-spacer'></div>
 """, unsafe_allow_html=True)
 
 # ============================================
