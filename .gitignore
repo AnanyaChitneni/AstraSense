@@ -1,0 +1,23 @@
+# Virtual environment — never commit this
+astrasense_env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# All checkpoint files — too large for GitHub
+models/checkpoint_epoch_*.pt
+
+# All timestamped best_model backups — only keep best_model.pt
+models/best_model_loss_*.pt
+
+
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
