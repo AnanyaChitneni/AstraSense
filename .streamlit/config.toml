@@ -8,3 +8,6 @@ base = "dark"
 backgroundColor = "#000510"
 secondaryBackgroundColor = "#000818"
 textColor = "#ffffff"
+
+[browser]
+gatherUsageStats = false

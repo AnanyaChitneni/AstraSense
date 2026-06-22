@@ -46,7 +46,6 @@ section[data-testid="stSidebar"] {
 #   ALL 10 STARS — REAL NASA DATA
 # ============================================
 STARS = {
-    # ── ORIGINAL 4 ──────────────────────────
     "Kepler-452": {
         "planet": "Kepler-452 b", "type": "Super Earth", "emoji": "🌍",
         "color": "#4488ff", "glow": "rgba(68,136,255,0.4)", "ring": False,
@@ -147,8 +146,6 @@ STARS = {
         "tags": ["Habitable Zone", "Water World?", "Super Earth"],
         "nasa_url": "https://science.nasa.gov/exoplanet-catalog/kepler-22b/",
     },
-
-    # ── NEW 6 ────────────────────────────────
     "Kepler-16": {
         "planet": "Kepler-16 b", "type": "Circumbinary", "emoji": "☀️",
         "color": "#FFD700", "glow": "rgba(255,215,0,0.4)", "ring": True,
@@ -407,7 +404,6 @@ st.markdown("""
     margin:0.8rem 0;
 }
 
-/* ── STAR SELECTOR — 5-col grid, 2 rows ── */
 .star-grid-10 {
     display:grid;
     grid-template-columns:repeat(5, 1fr);
@@ -443,7 +439,6 @@ st.markdown("""
     color:rgba(0,200,255,0.45); margin-top:0.4rem; line-height:1.4;
 }
 
-/* ── DETAIL PANEL ── */
 .detail-panel {
     background:rgba(0,5,25,0.92); border:1px solid rgba(0,180,255,0.18);
     border-radius:20px; padding:2rem; backdrop-filter:blur(20px);
@@ -498,9 +493,26 @@ st.markdown("""
     letter-spacing:0.4rem; margin:1rem 0 0.8rem; text-transform:uppercase;
 }
 
-/* ── COMPARE TABLE — 5-col ── */
 .compare-grid-10 {
     display:grid; grid-template-columns:repeat(5,1fr); gap:0.7rem;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+    .page-nav { padding: 0.7rem 1rem !important; }
+    .nav-links { display: none !important; }
+    .star-grid-10 { grid-template-columns: repeat(2, 1fr) !important; gap: 0.5rem !important; }
+    .star-emoji { font-size: 1.4rem !important; }
+    .star-name { font-size: 0.56rem !important; }
+    .star-highlight { display: none !important; }
+    .detail-panel { padding: 1rem !important; }
+    .planet-title { font-size: 1rem !important; }
+    .planet-desc { font-size: 0.78rem !important; }
+    .stats-table td { font-size: 0.7rem !important; padding: 0.35rem 0.3rem !important; }
+    .compare-grid-10 { grid-template-columns: repeat(2, 1fr) !important; gap: 0.5rem !important; }
+}
+@media (max-width: 480px) {
+    .star-grid-10 { grid-template-columns: repeat(2, 1fr) !important; }
 }
 </style>
 <div class='page-bg'></div>
@@ -515,7 +527,7 @@ st.markdown("""
     <a href='/' class='nav-logo' target="_self">◈ ASTRASENSE</a>
     <div class='nav-links'>
         <a href='/Analysis' target="_self">ANALYSIS</a>
-        <a href='/Star_Catalogue' target="_self">STAR CATALOGUE</a>
+        <a href='/Star_Catalogue' class='active' target="_self">STAR CATALOGUE</a>
         <a href='/Noise_Lab' target="_self">NOISE LAB</a>
         <a href='/Science' target="_self">THE SCIENCE</a>
         <a href='/Performance' target="_self">PERFORMANCE</a>
@@ -555,12 +567,11 @@ if 'selected_star' not in st.session_state:
     st.session_state.selected_star = "Kepler-452"
 
 # ============================================
-#   STAR SELECTOR — 5 cols × 2 rows via HTML grid
+#   STAR SELECTOR
 # ============================================
 st.markdown("<div class='sec-title'>◈ SELECT A STAR SYSTEM — 10 AVAILABLE</div>",
            unsafe_allow_html=True)
 
-# Build HTML card grid (display only)
 cards_html = "<div class='star-grid-10'>"
 for key, data in STARS.items():
     active_cls = "active" if st.session_state.selected_star == key else ""
@@ -574,7 +585,6 @@ for key, data in STARS.items():
 cards_html += "</div>"
 st.markdown(cards_html, unsafe_allow_html=True)
 
-# Streamlit buttons in 2 rows of 5 for interaction
 row1_keys = list(STARS.keys())[:5]
 row2_keys = list(STARS.keys())[5:]
 
@@ -650,12 +660,11 @@ with b2:
 st.markdown("<div class='glow-line'></div>", unsafe_allow_html=True)
 
 # ============================================
-#   QUICK COMPARISON — 5-col × 2 rows
+#   QUICK COMPARISON
 # ============================================
 st.markdown("<div class='sec-title'>◈ QUICK COMPARISON — ALL 10 SYSTEMS</div>",
            unsafe_allow_html=True)
 
-# Row 1
 st.markdown("<div style='font-family:Share Tech Mono,monospace;font-size:0.58rem;"
             "color:rgba(0,200,255,0.4);letter-spacing:0.25rem;margin-bottom:0.5rem;'>"
             "◈ ORIGINAL 4 + KEPLER-16</div>", unsafe_allow_html=True)
@@ -690,7 +699,6 @@ for col, key in zip(compare_row1, list(STARS.keys())[:5]):
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# Row 2
 st.markdown("<div style='font-family:Share Tech Mono,monospace;font-size:0.58rem;"
             "color:rgba(0,200,255,0.4);letter-spacing:0.25rem;margin-bottom:0.5rem;'>"
             "◈ NEW 5 ADDITIONS</div>", unsafe_allow_html=True)

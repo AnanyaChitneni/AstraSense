@@ -13,7 +13,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# ── BACKGROUND ───────────────────────────────
 def img_b64(path):
     if os.path.exists(path):
         with open(path, "rb") as f:
@@ -85,7 +84,6 @@ st.markdown("""
     margin:0 !important;
 }
 
-/* ── SLIDERS ── */
 .stSlider > div > div > div {
     background:rgba(0,60,120,0.3) !important; height:2px !important;
 }
@@ -105,7 +103,6 @@ st.markdown("""
     font-size:0.46rem !important;
 }
 
-/* ── SELECT ── */
 div[data-baseweb="select"] > div {
     background:rgba(0,5,22,0.97) !important;
     border:1px solid rgba(0,120,200,0.28) !important;
@@ -115,7 +112,6 @@ div[data-baseweb="select"] > div {
     font-size:0.72rem !important;
 }
 
-/* ── NUMBER INPUT ── */
 .stNumberInput input {
     background:rgba(0,5,22,0.97) !important;
     border:1px solid rgba(0,120,200,0.28) !important;
@@ -130,7 +126,6 @@ div[data-baseweb="select"] > div {
 </style>
 """, unsafe_allow_html=True)
 
-# ── DESIGN TOKENS ────────────────────────────
 BG    = 'rgba(0,4,20,0.97)'
 GRID  = 'rgba(0,80,160,0.07)'
 GLINE = 'rgba(0,140,230,0.13)'
@@ -175,7 +170,6 @@ def _legend():
                 bgcolor='rgba(0,4,20,0.92)',
                 bordercolor='rgba(0,130,200,0.18)', borderwidth=1)
 
-# ── SIGNAL FUNCTIONS ─────────────────────────
 def make_clean(t, depth):
     f = np.ones_like(t)
     t0, dur = 5.0, 0.5
@@ -220,7 +214,6 @@ def decompose(t, nl, sv, ins, cr, sy, seed):
         'Systematics': sy*0.001*np.polyval(np.random.randn(3)*0.1, t/t[-1]),
     }
 
-# ── CHART BUILDERS ────────────────────────────
 def fig_comparison(t, clean, noisy):
     fig = make_subplots(rows=2, cols=1, shared_xaxes=True,
                         vertical_spacing=0.04,
@@ -356,7 +349,6 @@ def fig_component(data, label, color):
     fig.update_layout(**lay)
     return fig
 
-# ── PAGE CSS ─────────────────────────────────
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600&display=swap');
@@ -396,7 +388,6 @@ st.markdown("""
 }
 .sec-title::before { content:'◈ '; color:rgba(0,200,255,0.5); font-size:0.6rem; }
 
-/* ── TOP CONTROL PANEL ── */
 .control-panel {
     background:rgba(0,4,20,0.96);
     border:1px solid rgba(0,120,200,0.2);
@@ -404,11 +395,7 @@ st.markdown("""
     padding:1.4rem 1.6rem 1.2rem;
     margin-bottom:0.8rem;
 }
-.cp-row {
-    display:grid;
-    gap:1.2rem;
-    align-items:start;
-}
+.cp-row { display:grid; gap:1.2rem; align-items:start; }
 .cp-5  { grid-template-columns:repeat(5,1fr); }
 .cp-6  { grid-template-columns:repeat(6,1fr); }
 .cp-3  { grid-template-columns:repeat(3,1fr); }
@@ -427,7 +414,6 @@ st.markdown("""
     text-transform:uppercase; display:block; margin-bottom:0;
 }
 
-/* ── METRIC CHIPS ── */
 .chips-row {
     display:grid; grid-template-columns:repeat(4,1fr);
     gap:0.6rem; margin-bottom:0.8rem;
@@ -449,7 +435,6 @@ st.markdown("""
     margin-top:0.22rem; text-transform:uppercase; display:block;
 }
 
-/* ── DERIVED PARAMS ── */
 .derived {
     background:rgba(0,4,20,0.97);
     border:1px solid rgba(0,120,200,0.2);
@@ -472,30 +457,44 @@ st.markdown("""
 }
 .d-v { font-family:'Orbitron',monospace; font-size:0.7rem; font-weight:600; }
 
-/* ── COMPONENT TITLE ── */
 .comp-title {
     font-family:'Share Tech Mono',monospace; font-size:0.54rem;
     letter-spacing:0.18rem; text-transform:uppercase; display:block;
     margin-bottom:0.15rem;
 }
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+    .page-nav { padding: 0.7rem 1rem !important; }
+    .nav-links { display: none !important; }
+    .control-panel { padding: 1rem 0.8rem !important; }
+    .cp-5 { grid-template-columns: repeat(2, 1fr) !important; }
+    .cp-6 { grid-template-columns: repeat(2, 1fr) !important; }
+    .chips-row { grid-template-columns: repeat(2, 1fr) !important; }
+    .chip-v { font-size: 0.85rem !important; }
+    .derived { padding: 0.8rem 0.7rem !important; }
+}
+@media (max-width: 480px) {
+    .cp-5 { grid-template-columns: 1fr !important; }
+    .cp-6 { grid-template-columns: 1fr !important; }
+}
 </style>
 """, unsafe_allow_html=True)
 
-# ── NAV ──────────────────────────────────────
 st.markdown("""
 <div class='page-nav'>
     <a href='/' class='nav-logo' target="_self">◈ ASTRASENSE</a>
     <div class='nav-links'>
         <a href='/Analysis' target="_self">ANALYSIS</a>
         <a href='/Star_Catalogue' target="_self">STAR CATALOGUE</a>
-        <a href='/Noise_Lab' target="_self">NOISE LAB</a>
+        <a href='/Noise_Lab' class='active' target="_self">NOISE LAB</a>
         <a href='/Science' target="_self">THE SCIENCE</a>
         <a href='/Performance' target="_self">PERFORMANCE</a>
     </div>
 </div>
+<div class='nav-spacer'></div>
 """, unsafe_allow_html=True)
 
-# ── HERO ─────────────────────────────────────
 st.markdown("""
 <div style='text-align:center;padding:0.5rem 1rem 0.7rem;'>
     <span style='font-family:Share Tech Mono,monospace;font-size:0.6rem;
@@ -518,62 +517,46 @@ st.markdown("""
 <div class='glow-line'></div>
 """, unsafe_allow_html=True)
 
-# ════════════════════════════════════════════
-#  TOP CONTROL PANEL — full width, all params
-# ════════════════════════════════════════════
 st.markdown("<div class='control-panel'>", unsafe_allow_html=True)
 
-# ── ROW A: Noise component sliders ──────────
-st.markdown("<div class='cp-section'>NOISE COMPONENTS</div>",
-            unsafe_allow_html=True)
+st.markdown("<div class='cp-section'>NOISE COMPONENTS</div>", unsafe_allow_html=True)
 st.markdown("<div class='cp-row cp-5'>", unsafe_allow_html=True)
 
 A1, A2, A3, A4, A5 = st.columns(5)
 with A1:
     st.markdown("<span class='sl-lbl'>NOISE LEVEL</span>", unsafe_allow_html=True)
-    nl = st.slider("", 0.1, 2.0, 0.5, 0.05, format="%.2f",
-                   key="nl", label_visibility="collapsed")
+    nl = st.slider("", 0.1, 2.0, 0.5, 0.05, format="%.2f", key="nl", label_visibility="collapsed")
 with A2:
     st.markdown("<span class='sl-lbl'>STELLAR VAR.</span>", unsafe_allow_html=True)
-    sv = st.slider("", 0.0, 1.0, 0.3, 0.05, format="%.2f",
-                   key="sv", label_visibility="collapsed")
+    sv = st.slider("", 0.0, 1.0, 0.3, 0.05, format="%.2f", key="sv", label_visibility="collapsed")
 with A3:
     st.markdown("<span class='sl-lbl'>INSTRUMENT</span>", unsafe_allow_html=True)
-    ins = st.slider("", 0.0, 1.0, 0.4, 0.05, format="%.2f",
-                    key="ins", label_visibility="collapsed")
+    ins = st.slider("", 0.0, 1.0, 0.4, 0.05, format="%.2f", key="ins", label_visibility="collapsed")
 with A4:
     st.markdown("<span class='sl-lbl'>COSMIC RAYS</span>", unsafe_allow_html=True)
-    cr = st.slider("", 0.0, 1.0, 0.2, 0.05, format="%.2f",
-                   key="cr", label_visibility="collapsed")
+    cr = st.slider("", 0.0, 1.0, 0.2, 0.05, format="%.2f", key="cr", label_visibility="collapsed")
 with A5:
     st.markdown("<span class='sl-lbl'>SYSTEMATICS</span>", unsafe_allow_html=True)
-    sy = st.slider("", 0.0, 1.0, 0.3, 0.05, format="%.2f",
-                   key="sy", label_visibility="collapsed")
+    sy = st.slider("", 0.0, 1.0, 0.3, 0.05, format="%.2f", key="sy", label_visibility="collapsed")
 
 st.markdown("</div>", unsafe_allow_html=True)
 
-# ── ROW B: Transit + config selectors ────────
 st.markdown("<div class='cp-section' style='margin-top:0.9rem;'>TRANSIT PARAMETERS &amp; CONFIGURATION</div>",
             unsafe_allow_html=True)
 
 B1, B2, B3, B4, B5, B6 = st.columns(6)
 with B1:
     st.markdown("<span class='sl-lbl'>Rp / Rs RATIO</span>", unsafe_allow_html=True)
-    rp = st.slider("", 0.01, 0.20, 0.10, 0.005, format="%.3f",
-                   key="rp", label_visibility="collapsed")
+    rp = st.slider("", 0.01, 0.20, 0.10, 0.005, format="%.3f", key="rp", label_visibility="collapsed")
 with B2:
     st.markdown("<span class='sl-lbl'>IMPACT PARAM</span>", unsafe_allow_html=True)
-    imp = st.slider("", 0.00, 0.90, 0.00, 0.05, format="%.2f",
-                    key="imp", label_visibility="collapsed")
+    imp = st.slider("", 0.00, 0.90, 0.00, 0.05, format="%.2f", key="imp", label_visibility="collapsed")
 with B3:
     st.markdown("<span class='sl-lbl'>TRANSIT DEPTH</span>", unsafe_allow_html=True)
-    tdep = st.slider("", 0.001, 0.05, 0.01, 0.001, format="%.3f",
-                     key="tdep", label_visibility="collapsed")
+    tdep = st.slider("", 0.001, 0.05, 0.01, 0.001, format="%.3f", key="tdep", label_visibility="collapsed")
 with B4:
     st.markdown("<span class='sl-lbl'>NOISE TYPE</span>", unsafe_allow_html=True)
-    ntype = st.selectbox("",
-        ["Gaussian", "Poisson", "Pink 1/f", "Shot"],
-        label_visibility="collapsed", key="ntype")
+    ntype = st.selectbox("", ["Gaussian", "Poisson", "Pink 1/f", "Shot"], label_visibility="collapsed", key="ntype")
 with B5:
     st.markdown("<span class='sl-lbl'>TARGET STAR</span>", unsafe_allow_html=True)
     star = st.selectbox("",
@@ -583,14 +566,10 @@ with B5:
         label_visibility="collapsed", key="star")
 with B6:
     st.markdown("<span class='sl-lbl'>RANDOM SEED</span>", unsafe_allow_html=True)
-    seed = st.number_input("", 0, 9999, 42,
-                           label_visibility="collapsed", key="seed")
+    seed = st.number_input("", 0, 9999, 42, label_visibility="collapsed", key="seed")
 
-st.markdown("</div>", unsafe_allow_html=True)  # close control-panel
+st.markdown("</div>", unsafe_allow_html=True)
 
-# ════════════════════════════════════════════
-#  COMPUTE
-# ════════════════════════════════════════════
 t      = np.linspace(0, 10, 1000)
 dt     = t[1] - t[0]
 clean  = make_clean(t, tdep)
@@ -601,9 +580,6 @@ rms    = float(np.std(res)*1e6)
 peak   = float(np.max(np.abs(res))*1e6)
 comps  = decompose(t, nl, sv, ins, cr, sy, int(seed))
 
-# ════════════════════════════════════════════
-#  METRIC CHIPS
-# ════════════════════════════════════════════
 snr_c = C['ok'] if snr>10 else C['mid'] if snr>5 else C['bad']
 st.markdown(f"""
 <div class='chips-row'>
@@ -628,35 +604,23 @@ st.markdown(f"""
 
 st.markdown("<div class='glow-line'></div>", unsafe_allow_html=True)
 
-# ════════════════════════════════════════════
-#  ROW 1 — Signal comparison (full width)
-# ════════════════════════════════════════════
-st.markdown("<div class='sec-title'>SIGNAL COMPARISON</div>",
-            unsafe_allow_html=True)
+st.markdown("<div class='sec-title'>SIGNAL COMPARISON</div>", unsafe_allow_html=True)
 st.plotly_chart(fig_comparison(t, clean, noisy), use_container_width=True)
 
 st.markdown("<div class='glow-line'></div>", unsafe_allow_html=True)
 
-# ════════════════════════════════════════════
-#  ROW 2 — Residual | PSD | Histogram
-# ════════════════════════════════════════════
-st.markdown("<div class='sec-title'>SPECTRAL &amp; STATISTICAL ANALYSIS</div>",
-            unsafe_allow_html=True)
+st.markdown("<div class='sec-title'>SPECTRAL &amp; STATISTICAL ANALYSIS</div>", unsafe_allow_html=True)
 R2a, R2b, R2c = st.columns(3)
 with R2a:
-    st.plotly_chart(fig_residual(t, clean, noisy),  use_container_width=True)
+    st.plotly_chart(fig_residual(t, clean, noisy), use_container_width=True)
 with R2b:
-    st.plotly_chart(fig_psd(clean, noisy, dt),       use_container_width=True)
+    st.plotly_chart(fig_psd(clean, noisy, dt), use_container_width=True)
 with R2c:
-    st.plotly_chart(fig_histogram(clean, noisy),     use_container_width=True)
+    st.plotly_chart(fig_histogram(clean, noisy), use_container_width=True)
 
 st.markdown("<div class='glow-line'></div>", unsafe_allow_html=True)
 
-# ════════════════════════════════════════════
-#  ROW 3 — Transit model | Derived params | SNR gauge
-# ════════════════════════════════════════════
-st.markdown("<div class='sec-title'>TRANSIT MODEL &amp; DIAGNOSTICS</div>",
-            unsafe_allow_html=True)
+st.markdown("<div class='sec-title'>TRANSIT MODEL &amp; DIAGNOSTICS</div>", unsafe_allow_html=True)
 R3a, R3b, R3c = st.columns([1.6, 0.9, 0.9])
 with R3a:
     st.plotly_chart(fig_transit(rp, imp, tdep), use_container_width=True)
@@ -665,34 +629,13 @@ with R3b:
     st.markdown(f"""
     <div class='derived'>
         <div class='d-title'>DERIVED PARAMS</div>
-        <div class='d-row'>
-            <span class='d-l'>PLANET RADIUS</span>
-            <span class='d-v' style='color:white;'>{pr:.2f} R⊕</span>
-        </div>
-        <div class='d-row'>
-            <span class='d-l'>FLUX DROP</span>
-            <span class='d-v' style='color:{C['noisy']};'>{fd:.0f} ppm</span>
-        </div>
-        <div class='d-row'>
-            <span class='d-l'>DURATION</span>
-            <span class='d-v' style='color:{C['clean']};'>~{dur:.1f} hrs</span>
-        </div>
-        <div class='d-row'>
-            <span class='d-l'>IMPACT b</span>
-            <span class='d-v' style='color:{C['residual']};'>{imp:.2f}</span>
-        </div>
-        <div class='d-row'>
-            <span class='d-l'>NOISE TYPE</span>
-            <span class='d-v' style='color:{C['stellar']};font-size:0.6rem;'>{ntype}</span>
-        </div>
-        <div class='d-row'>
-            <span class='d-l'>STAR</span>
-            <span class='d-v' style='color:rgba(160,215,255,0.85);font-size:0.58rem;'>{star}</span>
-        </div>
-        <div class='d-row'>
-            <span class='d-l'>Rp / Rs</span>
-            <span class='d-v' style='color:{C['cosmic']};'>{rp:.3f}</span>
-        </div>
+        <div class='d-row'><span class='d-l'>PLANET RADIUS</span><span class='d-v' style='color:white;'>{pr:.2f} R⊕</span></div>
+        <div class='d-row'><span class='d-l'>FLUX DROP</span><span class='d-v' style='color:{C['noisy']};'>{fd:.0f} ppm</span></div>
+        <div class='d-row'><span class='d-l'>DURATION</span><span class='d-v' style='color:{C['clean']};'>~{dur:.1f} hrs</span></div>
+        <div class='d-row'><span class='d-l'>IMPACT b</span><span class='d-v' style='color:{C['residual']};'>{imp:.2f}</span></div>
+        <div class='d-row'><span class='d-l'>NOISE TYPE</span><span class='d-v' style='color:{C['stellar']};font-size:0.6rem;'>{ntype}</span></div>
+        <div class='d-row'><span class='d-l'>STAR</span><span class='d-v' style='color:rgba(160,215,255,0.85);font-size:0.58rem;'>{star}</span></div>
+        <div class='d-row'><span class='d-l'>Rp / Rs</span><span class='d-v' style='color:{C['cosmic']};'>{rp:.3f}</span></div>
     </div>
     """, unsafe_allow_html=True)
 with R3c:
@@ -700,22 +643,14 @@ with R3c:
 
 st.markdown("<div class='glow-line'></div>", unsafe_allow_html=True)
 
-# ════════════════════════════════════════════
-#  ROW 4 — Noise component breakdown
-# ════════════════════════════════════════════
-st.markdown("<div class='sec-title'>NOISE COMPONENTS BREAKDOWN</div>",
-            unsafe_allow_html=True)
+st.markdown("<div class='sec-title'>NOISE COMPONENTS BREAKDOWN</div>", unsafe_allow_html=True)
 comp_colors = [C['photon'], C['stellar'], C['instr'], C['cosmic'], C['sys']]
 comp_cols   = st.columns(5)
 for col, (name, data), color in zip(comp_cols, comps.items(), comp_colors):
     with col:
-        st.markdown(
-            f"<span class='comp-title' style='color:{color};'>{name}</span>",
-            unsafe_allow_html=True)
-        st.plotly_chart(fig_component(data, name, color),
-                        use_container_width=True)
+        st.markdown(f"<span class='comp-title' style='color:{color};'>{name}</span>", unsafe_allow_html=True)
+        st.plotly_chart(fig_component(data, name, color), use_container_width=True)
 
-# ── FOOTER ───────────────────────────────────
 st.markdown("""
 <div style='text-align:center;font-family:Share Tech Mono;font-size:0.5rem;
      color:rgba(80,130,190,0.18);letter-spacing:0.25rem;

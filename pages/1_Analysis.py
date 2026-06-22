@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import lightkurve as lk
 from scipy.signal import savgol_filter, medfilt
-import sys, os, base64, time, warnings
+import sys, os, time, warnings
 warnings.filterwarnings('ignore')
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -33,10 +33,7 @@ section[data-testid="stSidebar"] {
     height: 0 !important;
     width: 0 !important;
 }
-.main > div:first-child {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-}
+.main > div:first-child { padding-top: 0 !important; margin-top: 0 !important; }
 .main .block-container {
     padding-top: 0 !important;
     padding-bottom: 2rem !important;
@@ -45,14 +42,8 @@ section[data-testid="stSidebar"] {
     max-width: 100% !important;
     margin: 0 !important;
 }
-[data-testid="stAppViewContainer"] {
-    background: #000510 !important;
-    padding: 0 !important;
-    margin: 0 !important;
-}
-[data-testid="stAppViewBlockContainer"] {
-    padding: 0 !important;
-}
+[data-testid="stAppViewContainer"] { background: #000510 !important; padding: 0 !important; margin: 0 !important; }
+[data-testid="stAppViewBlockContainer"] { padding: 0 !important; }
 .stTextInput > div > div > input {
     background: rgba(5,5,30,0.95) !important;
     border: 1px solid rgba(0,180,255,0.35) !important;
@@ -72,8 +63,7 @@ div[data-baseweb="select"] > div {
     color: white !important;
 }
 .stButton > button {
-    background: linear-gradient(135deg,
-        rgba(0,100,200,0.2), rgba(0,50,150,0.3)) !important;
+    background: linear-gradient(135deg, rgba(0,100,200,0.2), rgba(0,50,150,0.3)) !important;
     border: 1px solid rgba(0,180,255,0.5) !important;
     color: #00d4ff !important;
     font-family: 'Orbitron', monospace !important;
@@ -84,8 +74,7 @@ div[data-baseweb="select"] > div {
     width: 100% !important;
 }
 .stButton > button:hover {
-    background: linear-gradient(135deg,
-        rgba(0,150,255,0.3), rgba(0,80,200,0.4)) !important;
+    background: linear-gradient(135deg, rgba(0,150,255,0.3), rgba(0,80,200,0.4)) !important;
     box-shadow: 0 0 20px rgba(0,212,255,0.3) !important;
 }
 .stProgress > div > div > div {
@@ -94,25 +83,21 @@ div[data-baseweb="select"] > div {
 }
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: #050510; }
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(#00d4ff,#0044aa);
-    border-radius: 4px;
+::-webkit-scrollbar-thumb { background: linear-gradient(#00d4ff,#0044aa); border-radius: 4px; }
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+    .page-nav { padding: 0.7rem 1rem !important; }
+    .nav-links { display: none !important; }
+    .nav-logo { font-size: 0.8rem !important; letter-spacing: 0.12rem !important; }
+    .metric-card .mval { font-size: 1rem !important; }
+    .metric-card { padding: 0.8rem 0.4rem !important; }
 }
 </style>
 """, unsafe_allow_html=True)
 
 # ============================================
-#   HELPERS
-# ============================================
-def load_video_b64(path):
-    if os.path.exists(path):
-        with open(path, "rb") as f:
-            return base64.b64encode(f.read()).decode()
-    return ""
-
-
-# ============================================
-#   INTRO VIDEO
+#   INTRO — TITLE ANIMATION ONLY (no video, instant)
 # ============================================
 if 'analysis_intro_shown' not in st.session_state:
     st.session_state.analysis_intro_shown = False
@@ -120,88 +105,66 @@ if 'analysis_intro_shown' not in st.session_state:
 if not st.session_state.analysis_intro_shown:
     st.session_state.analysis_intro_shown = True
 
-    intro_b64 = load_video_b64("assets/intro_video.mp4")
-    intro_src = f"data:video/mp4;base64,{intro_b64}" if intro_b64 else ""
-
     st.markdown("""
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    """, unsafe_allow_html=True)
-
-    st.markdown(f"""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
-
-    body, .main, [data-testid="stAppViewContainer"] {{
-        overflow: hidden !important;
-    }}
-
-    #intro-overlay {{
+    body, .main, [data-testid="stAppViewContainer"] { overflow: hidden !important; }
+    #intro-overlay {
         position: fixed !important;
         top: 0 !important; left: 0 !important;
         width: 100vw !important; height: 100vh !important;
         z-index: 999999 !important;
         background: #000510;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 1;
-        transition: opacity 1s ease;
-    }}
-    #intro-overlay video {{
-        position: absolute; top: 0; left: 0;
-        width: 100%; height: 100%;
-        object-fit: cover;
-    }}
-    #intro-overlay .ov {{
-        position: absolute; top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,5,20,0.35);
-        z-index: 1;
-    }}
-    #intro-overlay .txt {{
-        position: relative; z-index: 2; text-align: center;
-        padding: 1rem;
-    }}
-    #intro-overlay .t1 {{
+        display: flex; align-items: center; justify-content: center;
+        opacity: 1; transition: opacity 0.7s ease;
+    }
+    #intro-overlay::before {
+        content: '';
+        position: absolute; inset: 0;
+        background:
+            radial-gradient(ellipse at 20% 30%, rgba(0,80,200,0.3) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 70%, rgba(0,40,150,0.2) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 50%, rgba(0,20,80,0.4) 0%, transparent 70%);
+        animation: introPulse 2s ease-in-out infinite alternate;
+    }
+    @keyframes introPulse {
+        from { opacity: 0.6; }
+        to   { opacity: 1; }
+    }
+    #intro-overlay .txt { position: relative; z-index: 2; text-align: center; padding: 1rem; }
+    #intro-overlay .t1 {
         font-family: 'Orbitron', monospace !important;
         font-size: clamp(2rem, 8vw, 7rem); font-weight: 900;
         background: linear-gradient(135deg,#00d4ff 0%,#0099ff 35%,#0055dd 65%,#00aaff 100%);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         background-clip: text;
         letter-spacing: clamp(0.15rem, 1.5vw, 0.7rem); line-height: 1;
-        opacity: 0;
-        animation: introUp 1s ease 0.4s forwards;
-    }}
-    #intro-overlay .t2 {{
+        opacity: 0; animation: introUp 0.7s ease 0.2s forwards;
+    }
+    #intro-overlay .t2 {
         font-family: 'Share Tech Mono', monospace !important;
         font-size: clamp(0.45rem, 1.3vw, 0.75rem);
         color: rgba(0,200,255,0.65);
         letter-spacing: clamp(0.1rem, 0.8vw, 0.45rem);
         margin-top: 1rem; opacity: 0;
-        animation: introUp 1s ease 0.9s forwards;
-    }}
-    #intro-overlay .gbar {{
+        animation: introUp 0.7s ease 0.55s forwards;
+    }
+    #intro-overlay .gbar {
         width: clamp(60px, 15vw, 180px); height: 1px;
         background: linear-gradient(90deg, transparent, #00d4ff, transparent);
         margin: 1rem auto; opacity: 0;
-        animation: introUp 1s ease 1.2s forwards;
-    }}
-    @keyframes introUp {{
-        from {{ opacity:0; transform:translateY(20px); }}
-        to   {{ opacity:1; transform:translateY(0); }}
-    }}
-    #intro-overlay.hiding {{
-        opacity: 0 !important;
-        pointer-events: none !important;
-    }}
-    #intro-overlay.hidden {{
-        display: none !important;
-    }}
+        animation: introUp 0.7s ease 0.75s forwards;
+    }
+    @keyframes introUp {
+        from { opacity:0; transform:translateY(20px); }
+        to   { opacity:1; transform:translateY(0); }
+    }
+    #intro-overlay.hiding { opacity: 0 !important; pointer-events: none !important; }
+    #intro-overlay.hidden { display: none !important; }
     </style>
 
     <div id="intro-overlay">
-        {'<video id="intro-vid" autoplay muted playsinline><source src="' + intro_src + '" type="video/mp4"></video>' if intro_src else '<div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(0,40,120,0.6),#000510);"></div>'}
-        <div class="ov"></div>
         <div class="txt">
             <div class="t1">ASTRASENSE</div>
             <div class="gbar"></div>
@@ -210,42 +173,19 @@ if not st.session_state.analysis_intro_shown:
     </div>
 
     <script>
-    (function() {{
-        var overlay  = document.getElementById('intro-overlay');
-        var vid      = document.getElementById('intro-vid');
-        var SHOW_MS  = 5000;   // exactly 5 seconds visible
-        var FADE_MS  = 800;    // fade out duration
-
-        function dismiss() {{
+    (function() {
+        var overlay = document.getElementById('intro-overlay');
+        function dismiss() {
             if (!overlay) return;
             overlay.classList.add('hiding');
-            setTimeout(function() {{
-                if (overlay) overlay.classList.add('hidden');
-                // Tell Streamlit to rerun via a small hack
-                window.parent.postMessage({{type:'streamlit:setComponentValue', value: true}}, '*');
-            }}, FADE_MS);
-        }}
-
-        // Primary: dismiss after exactly 5 seconds regardless of video
-        var timer = setTimeout(dismiss, SHOW_MS);
-
-        // If video exists and ends before 5s, still wait the full 5s
-        // If video ends after 5s, dismiss at 5s anyway
-        if (vid) {{
-            vid.addEventListener('ended', function() {{
-                // Video ended — dismiss if 5s already passed, else wait
-                // timer handles this automatically
-            }});
-            vid.addEventListener('error', function() {{
-                // Video failed to load — fallback to gradient, timer still runs
-                vid.style.display = 'none';
-            }});
-        }}
-    }})();
+            setTimeout(function() { if (overlay) overlay.classList.add('hidden'); }, 700);
+        }
+        setTimeout(dismiss, 1600);
+    })();
     </script>
     """, unsafe_allow_html=True)
 
-    time.sleep(5.5)
+    time.sleep(1.9)
     st.rerun()
 
 # ============================================
@@ -308,44 +248,33 @@ PLOTBG = 'rgba(8,8,35,0.95)'
 
 def main_chart(time_data, noisy, denoised, savgol, star):
     fig = make_subplots(
-        rows=3, cols=1, shared_xaxes=True,
-        vertical_spacing=0.06,
-        subplot_titles=[
-            "⬡  RAW TELESCOPE SIGNAL",
-            "◈  ASTRASENSE — AI DENOISED",
-            "◇  SAVITZKY-GOLAY BASELINE"
-        ]
+        rows=3, cols=1, shared_xaxes=True, vertical_spacing=0.06,
+        subplot_titles=["⬡  RAW TELESCOPE SIGNAL","◈  ASTRASENSE — AI DENOISED","◇  SAVITZKY-GOLAY BASELINE"]
     )
     t = time_data[:512]
     n, d, s = noisy[:512], denoised[:512], savgol[:512]
     fig.add_trace(go.Scatter(x=t, y=n, mode='lines',
         line=dict(color='#CC00FF', width=0.7),
-        fill='tozeroy', fillcolor='rgba(204,0,255,0.04)',
-        name='Raw'), row=1, col=1)
+        fill='tozeroy', fillcolor='rgba(204,0,255,0.04)', name='Raw'), row=1, col=1)
     fig.add_trace(go.Scatter(x=t, y=d, mode='lines',
         line=dict(color='#00D4FF', width=1.8),
-        fill='tozeroy', fillcolor='rgba(0,212,255,0.07)',
-        name='AI Denoised'), row=2, col=1)
+        fill='tozeroy', fillcolor='rgba(0,212,255,0.07)', name='AI Denoised'), row=2, col=1)
     thresh = np.percentile(d, 3)
     idx = np.where(d < thresh)[0]
     if len(idx):
         fig.add_trace(go.Scatter(x=t[idx], y=d[idx], mode='markers',
             marker=dict(color='#FF8C00', size=8, symbol='triangle-down',
-                       line=dict(color='#FFD700', width=1)),
-            name='Transit'), row=2, col=1)
+                       line=dict(color='#FFD700', width=1)), name='Transit'), row=2, col=1)
     fig.add_trace(go.Scatter(x=t, y=s, mode='lines',
         line=dict(color='#00FF88', width=1.3),
-        fill='tozeroy', fillcolor='rgba(0,255,136,0.04)',
-        name='Savitzky-Golay'), row=3, col=1)
+        fill='tozeroy', fillcolor='rgba(0,255,136,0.04)', name='Savitzky-Golay'), row=3, col=1)
     fig.update_layout(
-        height=700, paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor=PLOTBG,
+        height=700, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor=PLOTBG,
         font=dict(family='Share Tech Mono', color='rgba(255,255,255,0.4)', size=9),
         title=dict(text=f"◈  LIGHT CURVE  ·  {star.upper()}",
                   font=dict(family='Orbitron', size=15, color='#00D4FF'), x=0.5),
-        legend=dict(bgcolor='rgba(5,5,20,0.9)',
-                   bordercolor='rgba(0,212,255,0.2)', borderwidth=1,
-                   font=dict(family='Share Tech Mono', size=10, color='white')),
+        legend=dict(bgcolor='rgba(5,5,20,0.9)', bordercolor='rgba(0,212,255,0.2)',
+                   borderwidth=1, font=dict(family='Share Tech Mono', size=10, color='white')),
         margin=dict(l=60, r=20, t=70, b=40))
     fig.update_xaxes(gridcolor=GRID, linecolor=LINE,
         tickfont=dict(family='Share Tech Mono', size=8, color='rgba(255,255,255,0.3)'))
@@ -359,8 +288,8 @@ def rmse_chart(rd, rs, rm):
     fig = go.Figure()
     for lbl, v, c in [
         ('DDPM<br>AstraSense', rd, '#00D4FF'),
-        ('Savitzky-<br>Golay',  rs, '#00FF88'),
-        ('Median<br>Filter',    rm, '#FF4444')
+        ('Savitzky-<br>Golay', rs, '#00FF88'),
+        ('Median<br>Filter',   rm, '#FF4444')
     ]:
         fig.add_trace(go.Bar(x=[lbl], y=[v],
             marker=dict(color=c, opacity=0.85, line=dict(color=c, width=2)),
@@ -410,16 +339,14 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600&display=swap');
 
 .page-bg {
-    position:fixed; top:0; left:0;
-    width:100vw; height:100vh; z-index:-1;
+    position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1;
     background:
         radial-gradient(ellipse at 15% 50%, rgba(0,40,100,0.3) 0%, transparent 55%),
         radial-gradient(ellipse at 85% 20%, rgba(0,20,80,0.25) 0%, transparent 50%),
         linear-gradient(180deg,#000510,#000818,#000510);
 }
 .grid-bg {
-    position:fixed; top:0; left:0;
-    width:100%; height:100%; z-index:-1;
+    position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;
     background-image:
         linear-gradient(rgba(0,100,200,0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0,100,200,0.03) 1px, transparent 1px);
@@ -462,14 +389,10 @@ st.markdown("""
     letter-spacing:0.4rem; margin:0.5rem 0 0.5rem; text-transform:uppercase;
 }
 .metric-card {
-    background:rgba(5,8,30,0.92);
-    border:1px solid rgba(0,180,255,0.18);
-    border-radius:14px; padding:1.2rem 0.8rem;
-    text-align:center; transition:all 0.3s;
+    background:rgba(5,8,30,0.92); border:1px solid rgba(0,180,255,0.18);
+    border-radius:14px; padding:1.2rem 0.8rem; text-align:center; transition:all 0.3s;
 }
-.metric-card:hover {
-    border-color:rgba(0,212,255,0.5); transform:translateY(-3px);
-}
+.metric-card:hover { border-color:rgba(0,212,255,0.5); transform:translateY(-3px); }
 .mval { font-family:'Orbitron',monospace; font-size:1.5rem; font-weight:700; }
 .mlbl {
     font-family:'Share Tech Mono',monospace; font-size:0.58rem;
@@ -500,12 +423,15 @@ st.markdown("""
     color:#ff8c00; letter-spacing:0.2rem; padding:0.4rem 0;
 }
 
-/* ── TRAINED STAR BUTTONS — 2 rows of 5 ── */
-.star-btn-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+    .page-nav { padding: 0.7rem 1rem !important; }
+    .nav-links { display: none !important; }
+    .planet-card { padding: 1rem 0.7rem !important; }
+    .planet-name { font-size: 0.7rem !important; }
+    .pstat-val { font-size: 0.7rem !important; }
+    .mval { font-size: 1rem !important; }
+    .metric-card { padding: 0.8rem 0.3rem !important; }
 }
 </style>
 <div class='page-bg'></div>
@@ -519,13 +445,14 @@ st.markdown("""
 <div class='page-nav'>
     <a href='/' class='nav-logo' target="_self">◈ ASTRASENSE</a>
     <div class='nav-links'>
-        <a href='/Analysis' target="_self">ANALYSIS</a>
+        <a href='/Analysis' class='active' target="_self">ANALYSIS</a>
         <a href='/Star_Catalogue' target="_self">STAR CATALOGUE</a>
         <a href='/Noise_Lab' target="_self">NOISE LAB</a>
         <a href='/Science' target="_self">THE SCIENCE</a>
         <a href='/Performance' target="_self">PERFORMANCE</a>
     </div>
 </div>
+<div class='nav-spacer'></div>
 """, unsafe_allow_html=True)
 
 # ============================================
@@ -546,8 +473,7 @@ st.markdown("""
     </div>
     <div style='font-family:Exo 2,sans-serif;font-size:0.9rem;
          color:rgba(180,220,255,0.6);margin-top:0.5rem;font-weight:300;'>
-        Fetch real NASA telescope data and denoise it using
-        our trained 1D DDPM model in real time
+        Fetch real NASA telescope data and denoise it using our trained 1D DDPM model in real time
     </div>
 </div>
 <div class='glow-line'></div>
@@ -562,34 +488,26 @@ device_name = "RTX 3050" if torch.cuda.is_available() else "CPU"
 # ============================================
 #   INPUT SECTION
 # ============================================
-st.markdown("<div class='sec-title'>◈ TARGET CONFIGURATION</div>",
-           unsafe_allow_html=True)
+st.markdown("<div class='sec-title'>◈ TARGET CONFIGURATION</div>", unsafe_allow_html=True)
 
 c1, c2, c3 = st.columns([3, 2, 2])
 with c1:
-    st.markdown("<span class='inp-label'>◈ STAR DESIGNATION</span>",
-               unsafe_allow_html=True)
-    star_name = st.text_input("", value="Kepler-452",
-                              label_visibility="collapsed", key="star_inp")
+    st.markdown("<span class='inp-label'>◈ STAR DESIGNATION</span>", unsafe_allow_html=True)
+    star_name = st.text_input("", value="Kepler-452", label_visibility="collapsed", key="star_inp")
 with c2:
-    st.markdown("<span class='inp-label'>◈ TELESCOPE MISSION</span>",
-               unsafe_allow_html=True)
+    st.markdown("<span class='inp-label'>◈ TELESCOPE MISSION</span>", unsafe_allow_html=True)
     mission = st.selectbox("", ["Kepler", "TESS"], label_visibility="collapsed")
 with c3:
-    st.markdown("<span class='inp-label'>◈ NOISE LEVEL</span>",
-               unsafe_allow_html=True)
-    noise_level = st.slider("", 0.001, 0.01, 0.002, 0.001,
-                           format="%.3f", label_visibility="collapsed")
+    st.markdown("<span class='inp-label'>◈ NOISE LEVEL</span>", unsafe_allow_html=True)
+    noise_level = st.slider("", 0.001, 0.01, 0.002, 0.001, format="%.3f", label_visibility="collapsed")
 
 st.markdown("<br>", unsafe_allow_html=True)
 
 # ============================================
 #   TRAINED STAR QUICK BUTTONS — 2 rows of 5
 # ============================================
-st.markdown("<span class='inp-label'>◈ TRAINED STAR TARGETS — 10 SYSTEMS</span>",
-           unsafe_allow_html=True)
+st.markdown("<span class='inp-label'>◈ TRAINED STAR TARGETS — 10 SYSTEMS</span>", unsafe_allow_html=True)
 
-# Row 1 — original 4 + Kepler-16
 row1 = st.columns(5)
 trained_stars_r1 = ["Kepler-452", "Kepler-7", "Kepler-10", "Kepler-22", "Kepler-16"]
 for col, s, i in zip(row1, trained_stars_r1, range(5)):
@@ -597,7 +515,6 @@ for col, s, i in zip(row1, trained_stars_r1, range(5)):
         if st.button(s, key=f"q{i}"):
             star_name = s
 
-# Row 2 — 5 new stars
 row2 = st.columns(5)
 trained_stars_r2 = ["Kepler-62", "Kepler-186", "Kepler-69", "Kepler-442", "Kepler-90"]
 for col, s, i in zip(row2, trained_stars_r2, range(5, 10)):
@@ -623,18 +540,14 @@ if not analyze:
                  color:rgba(255,255,255,0.18);letter-spacing:0.3rem;'>
                 SELECT A TARGET STAR AND INITIALIZE ANALYSIS
             </div>
-            <div style='font-family:Share Tech Mono;font-size:0.62rem;
-                 color:rgba(255,255,255,0.1);letter-spacing:0.2rem;margin-top:0.5rem;'>
-                CONNECTING TO NASA MAST ARCHIVE IN REAL TIME
-            </div>
         </div>
     """, unsafe_allow_html=True)
     dc = st.columns(4)
     for col, (v, l, c) in zip(dc, [
-        ("10",        "STARS TRAINED", "#00D4FF"),
-        ("200K+",     "DATA POINTS",   "#0088FF"),
-        ("2.8M",      "PARAMETERS",    "#0055CC"),
-        (device_name, "COMPUTE",       "#00FF88"),
+        ("10", "STARS TRAINED", "#00D4FF"),
+        ("200K+", "DATA POINTS", "#0088FF"),
+        ("2.8M", "PARAMETERS", "#0055CC"),
+        (device_name, "COMPUTE", "#00FF88"),
     ]):
         with col:
             st.markdown(f"""
@@ -652,29 +565,22 @@ prog = st.progress(0)
 stat = st.empty()
 anim_box = st.empty()
 
-stat.markdown("<div class='status-proc'>◈ CONNECTING TO NASA MAST ARCHIVE...</div>",
-    unsafe_allow_html=True)
+stat.markdown("<div class='status-proc'>◈ CONNECTING TO NASA MAST ARCHIVE...</div>", unsafe_allow_html=True)
 prog.progress(10)
 
 t_data, f_data, target = fetch_star(star_name, mission)
 
 if t_data is None:
     prog.empty(); stat.empty()
-    st.error(f"Could not fetch '{star_name}'. "
-            f"Try: Kepler-452, Kepler-7, Kepler-10, Kepler-22, "
-            f"Kepler-16, Kepler-62, Kepler-186, Kepler-69, Kepler-442, Kepler-90")
+    st.error(f"Could not fetch '{star_name}'. Try: Kepler-452, Kepler-7, Kepler-10, Kepler-22, Kepler-16, Kepler-62, Kepler-186, Kepler-69, Kepler-442, Kepler-90")
     st.stop()
 
 target = str(target) if target else star_name
 prog.progress(28)
-stat.markdown(
-    f"<div class='status-live'>◈ DATA ACQUIRED — "
-    f"{len(f_data):,} POINTS · {target.upper()}</div>",
-    unsafe_allow_html=True)
+stat.markdown(f"<div class='status-live'>◈ DATA ACQUIRED — {len(f_data):,} POINTS · {target.upper()}</div>", unsafe_allow_html=True)
 time.sleep(0.3)
 
-stat.markdown("<div class='status-proc'>◈ PREPROCESSING SIGNAL...</div>",
-    unsafe_allow_html=True)
+stat.markdown("<div class='status-proc'>◈ PREPROCESSING SIGNAL...</div>", unsafe_allow_html=True)
 fs = f_data[:512].astype(np.float32)
 ts = t_data[:512]
 m, sd = fs.mean(), fs.std()+1e-8
@@ -683,31 +589,33 @@ noisy = cn + np.random.normal(0, noise_level, cn.shape).astype(np.float32)
 prog.progress(45)
 time.sleep(0.2)
 
-stat.markdown("<div class='status-proc'>◈ RUNNING DDPM DENOISING...</div>",
-    unsafe_allow_html=True)
+stat.markdown("<div class='status-proc'>◈ RUNNING DDPM DENOISING...</div>", unsafe_allow_html=True)
 
-steps = [
-    (100, "STEP 1/4  ·  NOISE PATTERN ANALYSIS",  1),
-    (300, "STEP 2/4  ·  FEATURE EXTRACTION",       2),
-    (500, "STEP 3/4  ·  SIGNAL RECONSTRUCTION",    3),
-    (700, "STEP 4/4  ·  TRANSIT ENHANCEMENT",      4),
-]
-for t_val, label, sn in steps:
-    with torch.no_grad():
-        x   = torch.FloatTensor(noisy).unsqueeze(0).unsqueeze(0).to(device)
-        out = torch.clamp(
-            model(x, torch.tensor([t_val], device=device)), -5, 5
-        ).squeeze().cpu().numpy()
-    anim_box.plotly_chart(step_chart(noisy, out, label, sn), use_container_width=True)
-    prog.progress(45 + sn*8)
-    time.sleep(0.5)
+# Skip 4-step animation on CPU (too slow on cloud) — run directly there
+if torch.cuda.is_available():
+    steps = [
+        (100, "STEP 1/4  ·  NOISE PATTERN ANALYSIS",  1),
+        (300, "STEP 2/4  ·  FEATURE EXTRACTION",       2),
+        (500, "STEP 3/4  ·  SIGNAL RECONSTRUCTION",    3),
+        (700, "STEP 4/4  ·  TRANSIT ENHANCEMENT",      4),
+    ]
+    for t_val, label, sn in steps:
+        with torch.no_grad():
+            x   = torch.FloatTensor(noisy).unsqueeze(0).unsqueeze(0).to(device)
+            out = torch.clamp(model(x, torch.tensor([t_val], device=device)), -5, 5).squeeze().cpu().numpy()
+        anim_box.plotly_chart(step_chart(noisy, out, label, sn), use_container_width=True)
+        prog.progress(45 + sn*8)
+        time.sleep(0.5)
+else:
+    for pct in [55, 65, 75, 82]:
+        prog.progress(pct)
+        time.sleep(0.1)
 
 denoised_signal = denoise(model, scheduler, noisy, device)
 anim_box.empty()
 prog.progress(82)
 
-stat.markdown("<div class='status-proc'>◈ COMPUTING BASELINES...</div>",
-    unsafe_allow_html=True)
+stat.markdown("<div class='status-proc'>◈ COMPUTING BASELINES...</div>", unsafe_allow_html=True)
 sv  = savgol_filter(noisy, window_length=51, polyorder=3)
 md  = medfilt(noisy, kernel_size=11)
 
@@ -718,11 +626,10 @@ sn_ = calc_snr(cn, denoised_signal)
 conf, depth, tc = transit_info(denoised_signal)
 
 prog.progress(100)
-time.sleep(0.2)
+time.sleep(0.15)
 prog.empty()
 stat.markdown(
-    f"<div class='status-live'>◈ ANALYSIS COMPLETE · "
-    f"{target.upper()} · {len(f_data):,} POINTS · {device_name}</div>",
+    f"<div class='status-live'>◈ ANALYSIS COMPLETE · {target.upper()} · {len(f_data):,} POINTS · {device_name}</div>",
     unsafe_allow_html=True)
 
 st.markdown("<div class='glow-line'></div>", unsafe_allow_html=True)
@@ -755,8 +662,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<div class='sec-title'>◈ LIGHT CURVE ANALYSIS</div>", unsafe_allow_html=True)
 ch, pl = st.columns([3, 1])
 with ch:
-    st.plotly_chart(main_chart(ts, noisy, denoised_signal, sv, target),
-                   use_container_width=True)
+    st.plotly_chart(main_chart(ts, noisy, denoised_signal, sv, target), use_container_width=True)
 with pl:
     period = round(365.25/max(1,tc)*0.1,1) if tc > 0 else "N/A"
     radius = round(np.sqrt(abs(depth)/100)*10, 3)
@@ -765,38 +671,14 @@ with pl:
     st.markdown(f"""
         <div class='planet-card'>
             <div class='planet-name'>{target.upper().replace('-',' ')}</div>
-            <div class='pstat'>
-                <div class='pstat-lbl'>TELESCOPE</div>
-                <div class='pstat-val'>{mission}</div>
-            </div>
-            <div class='pstat'>
-                <div class='pstat-lbl'>TOTAL POINTS</div>
-                <div class='pstat-val'>{len(f_data):,}</div>
-            </div>
-            <div class='pstat'>
-                <div class='pstat-lbl'>TRANSIT CONF</div>
-                <div class='pstat-val' style='color:#FF8C00;'>{conf}%</div>
-            </div>
-            <div class='pstat'>
-                <div class='pstat-lbl'>TRANSIT DEPTH</div>
-                <div class='pstat-val'>{depth:.4f}%</div>
-            </div>
-            <div class='pstat'>
-                <div class='pstat-lbl'>EST. PERIOD</div>
-                <div class='pstat-val' style='color:#00D4FF;'>{period} days</div>
-            </div>
-            <div class='pstat'>
-                <div class='pstat-lbl'>REL. RADIUS</div>
-                <div class='pstat-val' style='color:#0088FF;'>{radius} R⊕</div>
-            </div>
-            <div class='pstat'>
-                <div class='pstat-lbl'>AI vs MEDIAN</div>
-                <div class='pstat-val' style='color:{bc};'>{better}</div>
-            </div>
-            <div class='pstat'>
-                <div class='pstat-lbl'>COMPUTE</div>
-                <div class='pstat-val' style='color:#00FF88;'>{device_name}</div>
-            </div>
+            <div class='pstat'><div class='pstat-lbl'>TELESCOPE</div><div class='pstat-val'>{mission}</div></div>
+            <div class='pstat'><div class='pstat-lbl'>TOTAL POINTS</div><div class='pstat-val'>{len(f_data):,}</div></div>
+            <div class='pstat'><div class='pstat-lbl'>TRANSIT CONF</div><div class='pstat-val' style='color:#FF8C00;'>{conf}%</div></div>
+            <div class='pstat'><div class='pstat-lbl'>TRANSIT DEPTH</div><div class='pstat-val'>{depth:.4f}%</div></div>
+            <div class='pstat'><div class='pstat-lbl'>EST. PERIOD</div><div class='pstat-val' style='color:#00D4FF;'>{period} days</div></div>
+            <div class='pstat'><div class='pstat-lbl'>REL. RADIUS</div><div class='pstat-val' style='color:#0088FF;'>{radius} R⊕</div></div>
+            <div class='pstat'><div class='pstat-lbl'>AI vs MEDIAN</div><div class='pstat-val' style='color:{bc};'>{better}</div></div>
+            <div class='pstat'><div class='pstat-lbl'>COMPUTE</div><div class='pstat-val' style='color:#00FF88;'>{device_name}</div></div>
         </div>
     """, unsafe_allow_html=True)
 
@@ -827,7 +709,6 @@ with cp2:
             ◈ TARGET &nbsp;&nbsp; : {target.upper()}<br>
             ◈ MISSION &nbsp; : {mission}<br>
             ◈ POINTS &nbsp;&nbsp; : {len(fs)}<br>
-            ◈ BJD &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : {ts[0]:.2f} — {ts[-1]:.2f}<br>
             ◈ NOISE &nbsp;&nbsp;&nbsp; : {noise_level}<br>
             ◈ MODEL &nbsp;&nbsp;&nbsp; : 1D U-NET DDPM · 2.8M PARAMS<br>
             ◈ DEVICE &nbsp;&nbsp; : {device_name}
@@ -838,7 +719,6 @@ st.markdown("""
 <div style='text-align:center;font-family:Share Tech Mono;font-size:0.55rem;
      color:rgba(255,255,255,0.1);letter-spacing:0.25rem;padding:2rem 0;
      margin-top:2rem;border-top:1px solid rgba(0,180,255,0.1);'>
-    ASTRASENSE v2.0 &nbsp;◈&nbsp; 1D DDPM U-NET
-    &nbsp;◈&nbsp; NASA KEPLER / TESS &nbsp;◈&nbsp; 10 STAR SYSTEMS
+    ASTRASENSE v2.0 &nbsp;◈&nbsp; 1D DDPM U-NET &nbsp;◈&nbsp; NASA KEPLER / TESS &nbsp;◈&nbsp; 10 STAR SYSTEMS
 </div>
 """, unsafe_allow_html=True)
