@@ -268,7 +268,7 @@ def chart_star_rmse_dots():
     fig.update_layout(**lay)
     return fig
 
-# ── NAV iframe with base target _self ────────
+# ── NAV — uses window.top.location.href so links escape the iframe ──────────
 page_html = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -289,32 +289,33 @@ nav{
     font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;
     background:linear-gradient(135deg,#00d4ff,#0055cc);
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-    background-clip:text;letter-spacing:0.3rem;text-decoration:none;cursor:pointer;
+    background-clip:text;letter-spacing:0.3rem;
+    cursor:pointer;border:none;background-color:transparent;
+    text-decoration:none;display:inline-block;
 }
 .nav-links{display:flex;gap:2rem;}
-.nav-links a{
+.nav-links button{
     font-family:'Share Tech Mono',monospace;font-size:0.65rem;
-    color:rgba(180,220,255,0.6);text-decoration:none;
-    letter-spacing:0.15rem;transition:color 0.2s;text-transform:uppercase;cursor:pointer;
+    color:rgba(180,220,255,0.6);background:none;border:none;
+    letter-spacing:0.15rem;transition:color 0.2s;text-transform:uppercase;
+    cursor:pointer;padding:0;
 }
-.nav-links a:hover,.nav-links a.active{color:#00d4ff;}
+.nav-links button:hover,.nav-links button.active{color:#00d4ff;}
 @media(max-width:768px){
     nav{padding:0.7rem 1rem;}
     .nav-links{display:none;}
-    .nav-logo{font-size:0.8rem;letter-spacing:0.12rem;}
 }
 </style>
 </head>
 <body>
 <nav>
-    <a href="/" target="_self" class="nav-logo">◈ ASTRASENSE</a>
-
+    <span class="nav-logo" onclick="window.top.location.href='/'">◈ ASTRASENSE</span>
     <div class="nav-links">
-        <a href="/Analysis" target="_self">ANALYSIS</a>
-        <a href="/Star_Catalogue" target="_self">STAR CATALOGUE</a>
-        <a href="/Noise_Lab" target="_self">NOISE LAB</a>
-        <a href="/Science" target="_self">THE SCIENCE</a>
-        <a href="/Performance" target="_self" class="active">PERFORMANCE</a>
+        <button onclick="window.top.location.href='/Analysis'">ANALYSIS</button>
+        <button onclick="window.top.location.href='/Star_Catalogue'">STAR CATALOGUE</button>
+        <button onclick="window.top.location.href='/Noise_Lab'">NOISE LAB</button>
+        <button onclick="window.top.location.href='/Science'">THE SCIENCE</button>
+        <button class="active" onclick="window.top.location.href='/Performance'">PERFORMANCE</button>
     </div>
 </nav>
 </body>
@@ -341,40 +342,14 @@ st.markdown("""
     background-size:50px 50px;pointer-events:none;
 }
 .hero-strip{text-align:center;padding:2.5rem 2rem 2rem;}
-.hero-eye{
-    font-family:'Share Tech Mono',monospace;font-size:0.62rem;
-    color:rgba(0,200,255,0.55);letter-spacing:0.5rem;
-    text-transform:uppercase;display:block;margin-bottom:0.6rem;
-}
-.hero-title{
-    font-family:'Orbitron',monospace;
-    font-size:clamp(1.8rem,4vw,3.2rem);font-weight:900;
-    background:linear-gradient(135deg,#00d4ff,#0055cc);
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-    background-clip:text;letter-spacing:0.3rem;line-height:1.1;
-}
-.hero-sub{
-    font-family:'Exo 2',sans-serif;font-size:0.88rem;
-    color:rgba(150,200,255,0.55);margin-top:0.5rem;font-weight:300;
-}
-.glow-line{
-    height:1px;
-    background:linear-gradient(90deg,transparent,#00d4ff,#0044aa,transparent);
-    margin:0.5rem 0;
-}
-.sec-title{
-    font-family:'Orbitron',monospace;font-size:0.7rem;color:#00d4ff;
-    letter-spacing:0.4rem;margin:1.2rem 0 0.8rem;text-transform:uppercase;
-}
+.hero-eye{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:rgba(0,200,255,0.55);letter-spacing:0.5rem;text-transform:uppercase;display:block;margin-bottom:0.6rem;}
+.hero-title{font-family:'Orbitron',monospace;font-size:clamp(1.8rem,4vw,3.2rem);font-weight:900;background:linear-gradient(135deg,#00d4ff,#0055cc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:0.3rem;line-height:1.1;}
+.hero-sub{font-family:'Exo 2',sans-serif;font-size:0.88rem;color:rgba(150,200,255,0.55);margin-top:0.5rem;font-weight:300;}
+.glow-line{height:1px;background:linear-gradient(90deg,transparent,#00d4ff,#0044aa,transparent);margin:0.5rem 0;}
+.sec-title{font-family:'Orbitron',monospace;font-size:0.7rem;color:#00d4ff;letter-spacing:0.4rem;margin:1.2rem 0 0.8rem;text-transform:uppercase;}
 .sec-title::before{content:'◈ ';color:rgba(0,200,255,0.55);}
-.big-metric-row{
-    display:grid;grid-template-columns:repeat(5,1fr);gap:0.8rem;margin-bottom:1rem;
-}
-.big-chip{
-    background:rgba(1,5,18,0.97);border:1px solid rgba(0,100,180,0.22);
-    border-radius:14px;padding:1.2rem 0.8rem;text-align:center;
-    transition:all 0.3s;position:relative;overflow:hidden;
-}
+.big-metric-row{display:grid;grid-template-columns:repeat(5,1fr);gap:0.8rem;margin-bottom:1rem;}
+.big-chip{background:rgba(1,5,18,0.97);border:1px solid rgba(0,100,180,0.22);border-radius:14px;padding:1.2rem 0.8rem;text-align:center;transition:all 0.3s;}
 .big-chip:hover{border-color:rgba(0,200,255,0.35);transform:translateY(-3px);}
 .chip-val{font-family:'Orbitron',monospace;font-size:1.6rem;font-weight:700;line-height:1;}
 .chip-lbl{font-family:'Share Tech Mono',monospace;font-size:0.5rem;color:rgba(100,160,220,0.5);letter-spacing:0.15rem;margin-top:0.4rem;text-transform:uppercase;}
@@ -400,26 +375,25 @@ st.markdown("""
 .legend-chip{display:inline-flex;align-items:center;gap:0.4rem;font-family:'Share Tech Mono',monospace;font-size:0.56rem;color:rgba(180,220,255,0.65);letter-spacing:0.1rem;margin-right:1.2rem;}
 .legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 
-/* ── MOBILE ── */
 @media (max-width: 768px) {
-    .big-metric-row { grid-template-columns: repeat(2,1fr) !important; gap:0.5rem !important; }
-    .chip-val { font-size: 1.1rem !important; }
-    .verdict-stat-row { grid-template-columns: 1fr !important; }
-    .verdict { padding: 1.2rem 1rem !important; }
-    .verdict-body { font-size: 0.8rem !important; }
-    .info-card { padding: 1rem !important; }
-    .legend-chip { font-size: 0.44rem !important; margin-right: 0.5rem !important; }
-    .hero-strip { padding: 1.5rem 1rem 1rem !important; }
+    .big-metric-row{grid-template-columns:repeat(2,1fr)!important;gap:0.5rem!important;}
+    .chip-val{font-size:1.1rem!important;}
+    .verdict-stat-row{grid-template-columns:1fr!important;}
+    .verdict{padding:1.2rem 1rem!important;}
+    .verdict-body{font-size:0.8rem!important;}
+    .info-card{padding:1rem!important;}
+    .legend-chip{font-size:0.44rem!important;margin-right:0.5rem!important;}
+    .hero-strip{padding:1.5rem 1rem 1rem!important;}
 }
 @media (max-width: 480px) {
-    .big-metric-row { grid-template-columns: 1fr 1fr !important; }
+    .big-metric-row{grid-template-columns:1fr 1fr!important;}
 }
 </style>
 <div class='page-bg'></div>
 <div class='grid-bg'></div>
 """, unsafe_allow_html=True)
 
-st.markdown(f"""
+st.markdown("""
 <div class='hero-strip'>
     <span class='hero-eye'>◈ MODEL EVALUATION DASHBOARD — 10 STAR SYSTEMS</span>
     <div class='hero-title'>PERFORMANCE</div>
@@ -459,7 +433,6 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 st.markdown("<div class='glow-line'></div>", unsafe_allow_html=True)
-
 st.markdown("<div class='sec-title'>TRAINING ANALYSIS</div>", unsafe_allow_html=True)
 t1, t2 = st.columns([2.2, 1])
 with t1:
@@ -508,7 +481,6 @@ with b3: st.plotly_chart(chart_snr_bar(), use_container_width=True)
 
 st.markdown("<div class='glow-line'></div>", unsafe_allow_html=True)
 st.markdown("<div class='sec-title'>PER STAR ANALYSIS — ALL 10 SYSTEMS</div>", unsafe_allow_html=True)
-
 ps1, ps2 = st.columns([1.6, 1])
 with ps1: st.plotly_chart(chart_per_star(), use_container_width=True)
 with ps2: st.plotly_chart(chart_radar(),    use_container_width=True)
