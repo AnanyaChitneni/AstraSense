@@ -320,7 +320,7 @@ nav{
 </body>
 </html>"""
 
-st.iframe(page_html, height=5800)
+st.iframe(page_html, height=52)
 
 st.markdown("""
 <style>
