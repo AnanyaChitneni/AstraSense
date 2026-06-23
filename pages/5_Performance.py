@@ -272,7 +272,6 @@ def chart_star_rmse_dots():
 page_html = """<!DOCTYPE html>
 <html lang="en">
 <head>
-<base target="_self">
 <meta charset="UTF-8">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -290,13 +289,13 @@ nav{
     font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;
     background:linear-gradient(135deg,#00d4ff,#0055cc);
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-    background-clip:text;letter-spacing:0.3rem;text-decoration:none;
+    background-clip:text;letter-spacing:0.3rem;text-decoration:none;cursor:pointer;
 }
 .nav-links{display:flex;gap:2rem;}
 .nav-links a{
     font-family:'Share Tech Mono',monospace;font-size:0.65rem;
     color:rgba(180,220,255,0.6);text-decoration:none;
-    letter-spacing:0.15rem;transition:color 0.2s;text-transform:uppercase;
+    letter-spacing:0.15rem;transition:color 0.2s;text-transform:uppercase;cursor:pointer;
 }
 .nav-links a:hover,.nav-links a.active{color:#00d4ff;}
 @media(max-width:768px){
@@ -308,13 +307,13 @@ nav{
 </head>
 <body>
 <nav>
-    <a href="/" class="nav-logo">◈ ASTRASENSE</a>
+    <a onclick="window.top.location.href='/'" class="nav-logo">◈ ASTRASENSE</a>
     <div class="nav-links">
-        <a href="/Analysis">ANALYSIS</a>
-        <a href="/Star_Catalogue">STAR CATALOGUE</a>
-        <a href="/Noise_Lab">NOISE LAB</a>
-        <a href="/Science">THE SCIENCE</a>
-        <a href="/Performance" class="active">PERFORMANCE</a>
+        <a onclick="window.top.location.href='/Analysis'">ANALYSIS</a>
+        <a onclick="window.top.location.href='/Star_Catalogue'">STAR CATALOGUE</a>
+        <a onclick="window.top.location.href='/Noise_Lab'">NOISE LAB</a>
+        <a onclick="window.top.location.href='/Science'">THE SCIENCE</a>
+        <a onclick="window.top.location.href='/Performance'" class="active">PERFORMANCE</a>
     </div>
 </nav>
 </body>

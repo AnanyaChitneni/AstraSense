@@ -445,13 +445,13 @@ nav{{
 <body>
 
 <nav>
-    <a href="/" class="nav-logo">◈ ASTRASENSE</a>
+    <a onclick="window.top.location.href='/'" class="nav-logo" style="cursor:pointer;">◈ ASTRASENSE</a>
     <div class="nav-links">
-        <a href='/Analysis' target="_self">ANALYSIS</a>
-        <a href='/Star_Catalogue' target="_self">STAR CATALOGUE</a>
-        <a href='/Noise_Lab' target="_self">NOISE LAB</a>
-        <a href='/Science' target="_self">THE SCIENCE</a>
-        <a href='/Performance' target="_self">PERFORMANCE</a>
+        <a onclick="window.top.location.href='/Analysis'" style="cursor:pointer;">ANALYSIS</a>
+        <a onclick="window.top.location.href='/Star_Catalogue'" style="cursor:pointer;">STAR CATALOGUE</a>
+        <a onclick="window.top.location.href='/Noise_Lab'" style="cursor:pointer;">NOISE LAB</a>
+        <a onclick="window.top.location.href='/Science'" class="active" style="cursor:pointer;">THE SCIENCE</a>
+        <a onclick="window.top.location.href='/Performance'" style="cursor:pointer;">PERFORMANCE</a>
     </div>
 </nav>
 

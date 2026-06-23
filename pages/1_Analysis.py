@@ -452,6 +452,14 @@ st.markdown("""
         <a href='/Performance' target="_self">PERFORMANCE</a>
     </div>
 </div>
+<script>
+document.querySelectorAll('.page-nav a').forEach(function(e){
+    e.addEventListener('click',function(ev){
+        ev.preventDefault();
+        window.parent.location.href = this.getAttribute('href');
+    });
+});
+</script>
 <div class='nav-spacer'></div>
 """, unsafe_allow_html=True)
 
