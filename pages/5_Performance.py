@@ -307,13 +307,14 @@ nav{
 </head>
 <body>
 <nav>
-    <a onclick="window.top.location.href='/'" class="nav-logo">◈ ASTRASENSE</a>
+    <a href="/" target="_self" class="nav-logo">◈ ASTRASENSE</a>
+
     <div class="nav-links">
-        <a onclick="window.top.location.href='/Analysis'">ANALYSIS</a>
-        <a onclick="window.top.location.href='/Star_Catalogue'">STAR CATALOGUE</a>
-        <a onclick="window.top.location.href='/Noise_Lab'">NOISE LAB</a>
-        <a onclick="window.top.location.href='/Science'">THE SCIENCE</a>
-        <a onclick="window.top.location.href='/Performance'" class="active">PERFORMANCE</a>
+        <a href="/Analysis" target="_self">ANALYSIS</a>
+        <a href="/Star_Catalogue" target="_self">STAR CATALOGUE</a>
+        <a href="/Noise_Lab" target="_self">NOISE LAB</a>
+        <a href="/Science" target="_self">THE SCIENCE</a>
+        <a href="/Performance" target="_self" class="active">PERFORMANCE</a>
     </div>
 </nav>
 </body>
