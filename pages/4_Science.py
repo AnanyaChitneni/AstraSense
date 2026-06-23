@@ -445,14 +445,14 @@ nav{{
 <body>
 
 <nav>
-    <a href="/" target="_top" class="nav-logo">◈ ASTRASENSE</a>
+    <a href="/" target="_self" class="nav-logo">◈ ASTRASENSE</a>
 
     <div class="nav-links">
-        <a href="/Analysis" target="_top">ANALYSIS</a>
-        <a href="/Star_Catalogue" target="_top">STAR CATALOGUE</a>
-        <a href="/Noise_Lab" target="_top">NOISE LAB</a>
-        <a href="/Science" target="_top" class="active">THE SCIENCE</a>
-        <a href="/Performance" target="_top">PERFORMANCE</a>
+        <a href="/Analysis" target="_self">ANALYSIS</a>
+        <a href="/Star_Catalogue" target="_self">STAR CATALOGUE</a>
+        <a href="/Noise_Lab" target="_self">NOISE LAB</a>
+        <a href="/Science" target="_self" class="active">THE SCIENCE</a>
+        <a href="/Performance" target="_self">PERFORMANCE</a>
     </div>
 </nav>
 
