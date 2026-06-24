@@ -269,58 +269,57 @@ def chart_star_rmse_dots():
     return fig
 
 # ── NAV — uses window.top.location.href so links escape the iframe ──────────
-page_html = """<!DOCTYPE html>
-<html lang="en">
-<head>
-<base target="_self">
-<meta charset="UTF-8">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+st.markdown("""
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;background:#000510;overflow-x:hidden;}
-nav{
-    position:fixed;top:0;left:0;right:0;z-index:1000;
-    display:flex;align-items:center;justify-content:space-between;
+.perf-nav {
+    display:flex; align-items:center; justify-content:space-between;
     padding:0.85rem 2.5rem;
     background:rgba(0,4,18,0.92);
     border-bottom:1px solid rgba(0,180,255,0.15);
     backdrop-filter:blur(20px);
+    position:fixed; top:0; left:0; right:0; z-index:1000;
+    margin:0;
 }
-.nav-logo{
+.perf-nav-logo {
     font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;
     background:linear-gradient(135deg,#00d4ff,#0055cc);
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;
     background-clip:text;letter-spacing:0.3rem;text-decoration:none;
 }
-.nav-links{display:flex;gap:2rem;}
-.nav-links a{
+.perf-nav-links {display:flex;gap:2rem;}
+.perf-nav-links a {
     font-family:'Share Tech Mono',monospace;font-size:0.65rem;
     color:rgba(180,220,255,0.6);text-decoration:none;
     letter-spacing:0.15rem;transition:color 0.2s;text-transform:uppercase;
 }
-.nav-links a:hover,.nav-links a.active{color:#00d4ff;}
+.perf-nav-links a:hover, .perf-nav-links a.active {color:#00d4ff;}
+.perf-nav-spacer {height:52px;}
 @media(max-width:768px){
-    nav{padding:0.7rem 1rem;}
-    .nav-links{display:none;}
-    .nav-logo{font-size:0.8rem;letter-spacing:0.12rem;}
+    .perf-nav{padding:0.7rem 1rem;}
+    .perf-nav-links{display:none;}
+    .perf-nav-logo{font-size:0.8rem;letter-spacing:0.12rem;}
 }
 </style>
-</head>
-<body>
-<nav>
-    <a href="/" class="nav-logo">◈ ASTRASENSE</a>
-    <div class="nav-links">
-        <a href="/Analysis">ANALYSIS</a>
-        <a href="/Star_Catalogue">STAR CATALOGUE</a>
-        <a href="/Noise_Lab">NOISE LAB</a>
-        <a href="/Science">THE SCIENCE</a>
-        <a href="/Performance" class="active">PERFORMANCE</a>
+<div class='perf-nav'>
+    <a href='/' class='perf-nav-logo' target='_self'>◈ ASTRASENSE</a>
+    <div class='perf-nav-links'>
+        <a href='/Analysis' target='_self'>ANALYSIS</a>
+        <a href='/Star_Catalogue' target='_self'>STAR CATALOGUE</a>
+        <a href='/Noise_Lab' target='_self'>NOISE LAB</a>
+        <a href='/Science' target='_self'>THE SCIENCE</a>
+        <a href='/Performance' class='active' target='_self'>PERFORMANCE</a>
     </div>
-</nav>
-</body>
-</html>"""
-
-st.iframe(page_html, height=52)
+</div>
+<div class='perf-nav-spacer'></div>
+<script>
+document.querySelectorAll('.perf-nav a').forEach(function(a){
+    a.addEventListener('click',function(e){
+        e.preventDefault();
+        window.top.location.href = this.getAttribute('href');
+    });
+});
+</script>
+""", unsafe_allow_html=True)
 
 st.markdown("""
 <style>
