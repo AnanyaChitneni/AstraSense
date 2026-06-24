@@ -2,7 +2,6 @@
 headless = true
 enableCORS = false
 enableXsrfProtection = false
-maxUploadSize = 50
 
 [theme]
 base = "dark"
@@ -15,3 +14,6 @@ gatherUsageStats = false
 
 [runner]
 fastReruns = true
+
+[client]
+showSidebarNavigation = false
